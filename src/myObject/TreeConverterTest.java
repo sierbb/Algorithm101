@@ -1,6 +1,8 @@
 package myObject;
 
+import java.util.Arrays;
 import java.util.List;
+import myObject.ArrayList;
 import myObject.BinaryTreeConverter;
 
 public class TreeConverterTest {
@@ -27,8 +29,8 @@ public class TreeConverterTest {
         System.out.println(root.left.key);
         System.out.println(root.right.key);
 
-        List<Integer> treeArray = btc.deconstructureTree(root);
-        System.out.println(treeArray);
+        ArrayList<Integer> treeArray = btc.deconstructureTree(root);
+        System.out.println(Arrays.toString(treeArray.toArray()));
 
         TreeConverterTest mbt = new TreeConverterTest();
         TreeNode res = mbt.getSmallestLargeNode(root);

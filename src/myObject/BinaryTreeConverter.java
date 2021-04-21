@@ -1,8 +1,8 @@
 package myObject;
 
 import java.util.List;
-import java.util.ArrayList;
 
+import myObject.ArrayList;
 import myObject.TreeNode;
 import myObject.ArrayQueue;
 
@@ -55,12 +55,12 @@ public class BinaryTreeConverter {
         return root;
     }
 
-    public List<Integer> deconstructureTree(TreeNode root) {
+    public ArrayList<Integer> deconstructureTree(TreeNode root) {
         //deconstructure a tree into array. Using BFS and a fifo
         //we dont know how many nodes yet, so we can use an ArrayList.
         //Termination rule: when queue is empty, means no more node is available
         //TC:O(n), SC:O(n) ~= number of nodes on fifo queue last level
-        List<Integer> res = new ArrayList<Integer>();
+        ArrayList<Integer> res = new ArrayList<Integer>();
         if (root == null) {
             return res;
         }
