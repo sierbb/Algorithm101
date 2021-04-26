@@ -59,7 +59,7 @@ public class BinaryTreeConverter {
         //deconstructure a tree into array. Using BFS and a fifo
         //we dont know how many nodes yet, so we can use an ArrayList.
         //Termination rule: when queue is empty, means no more node is available
-        //TC:O(n), SC:O(n) ~= number of nodes on fifo queue last level
+        //TC:O(n), SC:O(n) ~= number of nodes on tree's last level=2^(height-1)=2^(logn-1)=n/2
         ArrayList<Integer> res = new ArrayList<Integer>();
         if (root == null) {
             return res;
@@ -67,20 +67,16 @@ public class BinaryTreeConverter {
 
         ArrayQueue<TreeNode> fifo = new ArrayQueue<TreeNode>(); //a queue can not accept null node so how do we do it? Use our own queue instead
         fifo.offer(root);
-        while(!fifo.isEmpty()) {
+        while(!fifo.isAllNull()) { //isAllNull = true means there are no more non-null nodes left in the tree
             TreeNode cur = fifo.poll();
             if (cur == null) { //our own ArrayQueue can store null node
                 res.add(null); //ArrayList accepts null element
+                fifo.offer(null); //even if it is null, still need to add to queue, to fake a complete tree view
+                fifo.offer(null);
             } else {
                 res.add(cur.key);
-                //if it is a leaf node then we dont offer its children
-                if (cur.left == null && cur.right == null) {
-                    continue;
-                } else {
-                    //if it is a null node, we still want to add it
-                    fifo.offer(cur.left);
-                    fifo.offer(cur.right);
-                }
+                fifo.offer(cur.left);
+                fifo.offer(cur.right);
             }
         }
         //TODO: what if return type is []Integer, convert it to an array

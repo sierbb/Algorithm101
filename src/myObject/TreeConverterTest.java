@@ -22,7 +22,7 @@ public class TreeConverterTest {
 
     public static void main(String[] args) {
         BinaryTreeConverter btc = new BinaryTreeConverter();
-        Integer[] input = new Integer[]{1, 3, 4, 2, null, null, 6};
+        Integer[] input = new Integer[]{1, 3, 4, 2, null, null, 6, 1, null, null, null, null, null, 7};
 //		Integer[] input = new Integer[]{5,4,6};
         TreeNode root = btc.constructTree(input);
         System.out.println(root.key);
