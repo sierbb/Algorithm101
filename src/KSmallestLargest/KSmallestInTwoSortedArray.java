@@ -1,4 +1,4 @@
-package kSmallestLargest;
+package KSmallestLargest;
 
 import java.util.*;
 
