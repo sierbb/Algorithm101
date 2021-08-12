@@ -44,10 +44,11 @@ public class TimeBasedKeyValueStoreTest {
         assertTrue(d3 > d2);
         map.set("A", "a", d1);
         map.set("A", "b", d2);
-        map.set("A", "c", d3);
+        map.set("A", "c");
         map.set("A", "d");
+        assertEquals(map.get("A"), "d");
+        assertEquals(map.get("A", d1), "a");
         assertEquals(map.get("A", d2), "b");
-        assertEquals(map.get("A", d3), "c");
     }
 
     @Test

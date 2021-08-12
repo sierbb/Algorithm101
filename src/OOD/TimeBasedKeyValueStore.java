@@ -1,12 +1,10 @@
 package OOD;
 
 import java.util.*;
-import java.util.Date;
 
 public class TimeBasedKeyValueStore {
 
-    private Map<String, List<Node>> map;
-    private final Date date= new Date();
+    private Map<String, List<Node>> map;;
 
     /** Initialize your data structure here. */
     public TimeBasedKeyValueStore() {
@@ -26,7 +24,7 @@ public class TimeBasedKeyValueStore {
         if (!map.containsKey(key)){
             map.put(key, new ArrayList<Node>());
         }
-        long cur = date.getTime();
+        long cur =  System.currentTimeMillis();;
         map.get(key).add(new Node(value, cur));
         return cur;
     }
