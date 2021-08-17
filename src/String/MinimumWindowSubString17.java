@@ -3,9 +3,13 @@ package String;
 import java.util.*;
 
 public class MinimumWindowSubString17 {
+
     public String minWindow(String s, String t) {
         //corner case
-        if (s == null || t == null || s.length() == 0 || t.length() == 0 || s.length() < t.length()) return "";
+        if (s == null || t == null || s.length() == 0 || t.length() == 0 || s.length() < t.length()){
+            return "";
+        }
+
         Map<Character, Integer> map = new HashMap<>();
         for (int i=0; i<t.length(); i++){
             if (!map.containsKey(t.charAt(i))){
@@ -13,6 +17,7 @@ public class MinimumWindowSubString17 {
             }
             map.put(t.charAt(i), map.get(t.charAt(i))+1);
         }
+
         //linear scan sliding window
         int i =0, j=0;
         int valid  = 0;
@@ -43,6 +48,7 @@ public class MinimumWindowSubString17 {
             }
             j++;
         }
+
         return globalMin == Integer.MAX_VALUE? "": s.substring(oL, oR+1);
     }
 
