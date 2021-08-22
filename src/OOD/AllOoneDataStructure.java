@@ -23,11 +23,12 @@ public class AllOoneDataStructure {
 
     /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
     public void inc(String key) {
+        //1.First update freMap, as key's freq has incr
         if (!freqMap.containsKey(key)){
             freqMap.put(key, 0);
         }
         freqMap.put(key, freqMap.get(key)+1);
-        //move key from bucket to another bucket
+        //2. move key from bucket to another bucket
         int freq = freqMap.get(key);
         if (!nodeMap.containsKey(freq)) {
             nodeMap.put(freq, new DoubleListBucket(freq)); //what to do with the new Node
@@ -40,8 +41,10 @@ public class AllOoneDataStructure {
             oldNode = nodeMap.get(freq-1);
             oldNode.removeKey(key);
         }
+        //Add new node right after oldNode, because newNode now has freq +1 then oldNode
+        // -> we need to keep the order of nodes by their freq as ascending, as we are using head & tail as min & max value pointer
         //Need to first add newNode then remove oldNode, since removing oldNode will lost the change to insert newNode after old
-        if (newNode.set.size() == 1){
+        if (newNode.set.size() == 1){ //if newNode size == 1, means its a real new Node needs to be inserted to list
             newNode.next = oldNode.next;
             newNode.prev = oldNode;
             oldNode.next = newNode;
@@ -63,7 +66,7 @@ public class AllOoneDataStructure {
 
     /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
     public void dec(String key) {
-        //move the key to another freq bucket
+        //1. move the key to another freq bucket
         //And consider if need to detach old bucket from list, or add new bucket
         int freq = freqMap.get(key)-1;
         freqMap.put(key, freq);
