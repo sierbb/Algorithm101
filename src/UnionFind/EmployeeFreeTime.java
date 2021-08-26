@@ -29,8 +29,6 @@ public class EmployeeFreeTime {
             }
         });
 
-        int[] pointers = new int[schedule.size()];
-        boolean stop = false;
         for (int i= 0; i < schedule.size(); i++){
             minHeap.offer(new Node(schedule.get(i).get(0), i, 0));
         }
