@@ -1,7 +1,5 @@
 package TaskScheduler;
 
-import UnionFind.EmployeeFreeTime;
-
 import java.util.PriorityQueue;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
@@ -60,7 +58,7 @@ public class DelayQueue<E extends Delayed> {
         final Lock lock = this.lock;
         lock.lockInterruptibly();
         try{
-            for (;;){
+            while (true){
                 E first = q.peek();
                 if ( first == null ){
                     condition.await(); //release the lock

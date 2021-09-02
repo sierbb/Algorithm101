@@ -20,19 +20,20 @@ public class DelayedTaskScheduler implements DelayTaskScheduler {
     }
 
     public void runTask(long delayTime, Runnable task){
+        System.out.println("Run task: " + task);
         DelayTask newTask = new DelayTask(task, delayTime);
         q.put(newTask);
     }
 
 }
 
-class TestDelayQueue{
-
-    public static void main(String[] args){
-        DelayQueue<DelayTask> queue = new DelayQueue<>();
-        new Thread(new Producer(queue), "Producer Thread").start();
-        new Thread(new Consumer(queue), "Consumer Thread").start();
-    }
-
-}
+//class TestDelayQueue{
+//
+//    public static void main(String[] args){
+//        DelayQueue<DelayTask> queue = new DelayQueue<>();
+//        new Thread(new Producer(queue), "Producer Thread").start();
+//        new Thread(new Consumer(queue), "Consumer Thread").start();
+//    }
+//
+//}
 
