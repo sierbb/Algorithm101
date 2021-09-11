@@ -16,7 +16,9 @@ public class LongestLineOfConsecutiveOneinMatrix {
                     dp[i][j][0] = j > 0 ? dp[i][j-1][0]+1 : 1; //if out of bound (on the edge, then dp == 1)
                     dp[i][j][1] = i > 0 ? dp[i-1][j][1]+1: 1;
                     dp[i][j][2] = (i > 0 && j> 0) ? dp[i-1][j-1][2]+1: 1;
-                    dp[i][j][3] = (j < mat[0].length-1 && i > 0) ? dp[i-1][j+1][3]+1: 1; //j 看右边的值，一般一直都是0吧？
+                    dp[i][j][3] = (j < mat[0].length-1 && i > 0) ? dp[i-1][j+1][3]+1: 1;
+                    //since we are filling in DP matrix from top down, we need to make sure we look at the top rows when we do anti-diagonal, not look at bottom left
+                    // dp[i][j][3] = (i < mat.length-1 && j>0) ? dp[i+1][j-1][3]+1 : 1;
                 }
                 globalMax = Math.max(globalMax, Math.max(dp[i][j][0], Math.max(dp[i][j][1], Math.max(dp[i][j][2], dp[i][j][3]))));
             }
