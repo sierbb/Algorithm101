@@ -15,11 +15,11 @@ class BoundedBlockingQueue {
     }
 
     public synchronized boolean enqueue(int element){
-        //1.can only do this when queue is not full, otherwise wait
+        //1.can only do this when queue is not full, otherwise wait and release the lock
         //2.when it sees queue is empty, notifyAll (producer)
         while ( q.size() == limit ){
             try{
-                wait();
+                wait(); //release lock
                 System.out.println("Producer waiting...");
             }catch(InterruptedException e){
                 e.printStackTrace();
@@ -33,11 +33,11 @@ class BoundedBlockingQueue {
     }
 
     public synchronized int dequeue() {
-        //1.can only do this when queue is not empty, otherwise wait
+        //1.can only do this when queue is not empty, otherwise wait and release the lock
         //2.when it sees queue is full, notifyAll (consumer)
         while ( q.size() == 0 ){
             try{
-                wait();
+                wait(); //release lock
                 System.out.println("Consumer waiting...");
             }catch(InterruptedException e){
                 e.printStackTrace();
