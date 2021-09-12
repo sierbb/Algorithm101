@@ -8,73 +8,47 @@ public class FindAndReplaceString {
         if (s == null || s.length()== 0 || indices == null || indices.length == 0){
             return s;
         }
-        char[] array = s.toCharArray();
-
-        Pair[] pairs = new Pair[indices.length];
+        //build the inndice : index list to be sorted
+        List<int[]> indexList = new ArrayList<>();
         for (int i=0; i < indices.length; i++){
-            pairs[i] = new Pair(indices[i], sources[i], targets[i]);
+            indexList.add(new int[]{indices[i], i});
         }
-        Arrays.sort(pairs, new Comparator<Pair>(){
-            @Override
-            public int compare(Pair p1, Pair p2){
-                return p1.indice - p2.indice;
-            }
-        });
+        Collections.sort(indexList, (a1, a2) -> a1[0] - a2[0]);
 
-        //check which indices are matching, as well as checking whether we need to expand the char[]
-        List<Integer> validIndices = new ArrayList<>();
-        for (int i=0; i < pairs.length; i++){
-            //if matching source, mark as valid indice, and see whether we need to expand char[] size
-            if (matchSubstring(array, pairs[i].indice,  pairs[i].source)){
-                validIndices.add(i);
-            }
-        }
         //whether or not we need expand size, we still create a new char[] to do it
         StringBuilder sb = new StringBuilder();
-        //Iterate through valid indices and do the replacement in-place
+        //Iterate through indexList and do the replacement if source matching original substring
         int startIdx = 0;
-        for (int i=0; i < validIndices.size(); i++){
-            int valid = validIndices.get(i);
-            int sourceStartIdx = pairs[valid].indice; //indice we need to replace substring from
-            //first copy the substring before the source index
-            while (startIdx < sourceStartIdx){
-                sb.append(array[startIdx]);
-                startIdx++;
+        for (int i=0; i < indexList.size(); i++){
+            int strIdx = indexList.get(i)[0]; //indice we need to replace substring from
+            int sourceIdx = indexList.get(i)[1];
+
+            if (matchSubstring(s, strIdx, sources[sourceIdx])){
+                //first copy the substring before the source index
+                sb.append(s.substring(startIdx, strIdx)); //substring(startIdx, endIdx); -> endIdx is exclusive
+                //now copy the source substring
+                sb.append(targets[sourceIdx]);
+                startIdx = strIdx + sources[sourceIdx].length();
             }
-            //now copy the source substring
-            sb.append(pairs[valid].target);
-            startIdx +=  pairs[valid].source.length();
         }
         //still need to copy the rest part if applicable
-        while (startIdx < array.length){
-            sb.append(array[startIdx]);
-            startIdx++;
+        if (startIdx < s.length()){
+            sb.append(s.substring(startIdx));
         }
         return sb.toString();
     }
 
-    private boolean matchSubstring(char[] array, int index, String source){
+    private boolean matchSubstring(String original, int index, String source){
         int startIdx = index;
         for (int i=0; i < source.length(); i++){
-            if (index + i >= array.length){ //out of bound
+            if (index + i >= original.length()){ //out of bound
                 return false;
             }
-            if (array[index+i] != source.charAt(i)){
+            if (original.charAt(index+i) != source.charAt(i)){
                 return false;
             }
         }
         return true;
-    }
-
-    static class Pair{
-        private int indice;
-        private String source;
-        private String target;
-        public Pair(int indice, String source, String target){
-            this.indice = indice;
-            this.source = source;
-            this.target = target;
-        }
     }
 
     public static void main(String[] args){
