@@ -17,14 +17,14 @@ public class NextPermutation {
             reverse(nums, 0, nums.length-1);
             return;
         }
-        //Step2: find the smallest element larger than nums[i-1], nums[i, n-1] side is in descending order
+        //Step2: find the smallest element larger than nums[cliff], nums[cliff, n-1] side is in descending order
         for (int j=nums.length-1; j > cliff; j--){
             if (nums[j] > nums[cliff]){
                 swap(nums, j, cliff);
                 break;
             }
         }
-        //Step 3: reverse all elements from nums[i, n-1]
+        //Step 3: reverse all elements from nums[cliff, n-1]
         reverse(nums, cliff+1, nums.length-1);
     }
 

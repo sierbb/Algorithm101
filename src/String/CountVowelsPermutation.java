@@ -8,6 +8,7 @@ public class CountVowelsPermutation {
         if (n == 0){
             return 0;
         }
+        //-> aDP[i] represents string of length i ends at a, the number of permutation.
         long[] aDP = new long[n+1];
         long[] eDP = new long[n+1];
         long[] iDP = new long[n+1];

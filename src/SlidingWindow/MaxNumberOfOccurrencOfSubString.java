@@ -8,19 +8,20 @@ public class MaxNumberOfOccurrencOfSubString {
         if (s == null || s.length() == 0){
             return 0;
         }
-        Map<Character, Integer> unique = new HashMap<>();
-        Map<String, Integer> substringMap = new HashMap<>();
+        Map<Character, Integer> unique = new HashMap<>(); //<char, frequency>
+        Map<String, Integer> substringMap = new HashMap<>(); //<substring, frequency>
         int[] globalMax = new int[1];
         int i = 0;
         int j = 0;
         StringBuilder sb = new StringBuilder();
+        //Move right pointer, then move left to control the length of substring we are checking at
         while (j < s.length()){
             //The main rule here should be: whether window size is out of range, we use this to decide move any pointer
             //now assume j has not been counted
             char add = s.charAt(j);
             sb.append(add);
             int freq = unique.getOrDefault(add, 0)+1;
-            unique.put(add, freq);
+            unique.put(add, freq); //current substring's char count
             updateMax(unique, substringMap, sb, globalMax, maxLetters, minSize); //update when any pointer moves
             // not increase j yet since we haven't processed i
 
@@ -78,3 +79,6 @@ public class MaxNumberOfOccurrencOfSubString {
 
 //globalMax = 0,
 //map{ aab:2, aba:1; bab:1  }
+
+//TC:O(n^2) moving j and i
+//SC:O(k) for char map + O(n^2) for wordMap = O(n^2)
