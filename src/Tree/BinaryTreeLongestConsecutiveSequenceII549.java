@@ -25,27 +25,30 @@ public class BinaryTreeLongestConsecutiveSequenceII549 {
     }
 
     private int[] longestConsecutiveHelper(TreeNode root, int[] max){
+        //Idea: Run pre-Order traversal to traverse the tree, update Max during the process
         if (root == null) return new int[]{0,0};
+
+        //crate the out [asce, desc] array as current level output
         int[] out = new int[2];
-        out[0] = 1;
-        out[1] = 1;
+        out[0] = 1; //asc
+        out[1] = 1; //desc
         if (root.left != null){
             int[] left = longestConsecutiveHelper(root.left, max);
-            if (root.left.val+1 == root.val){
+            if (root.left.val+1 == root.val){ //root-left desc
                 out[1] = Math.max(left[1]+1, out[1]);
-            }else if (root.left.val-1==root.val){
+            }else if (root.left.val-1==root.val){ //root-left aesc
                 out[0] = Math.max(left[0]+1, out[0]);
             }
         }
         if (root.right != null){
             int[] right = longestConsecutiveHelper(root.right, max);
-            if (root.right.val+1==root.val){
+            if (root.right.val+1==root.val){ //root-right desc
                 out[1] = Math.max(right[1]+1, out[1]);
-            }else if (root.right.val-1==root.val){
+            }else if (root.right.val-1==root.val){ //root-right desc
                 out[0] = Math.max(right[0]+1, out[0]);
             }
         }
-        //update globalMax
+        //update globalMax for a path that has current not as break point
         max[0] = Math.max(max[0], out[0]+out[1]-1);
         return out;
     }

@@ -2,6 +2,11 @@ package BFS;
 
 import java.util.*;
 
+/**
+ * Find the shortest path from beginWord to endWord
+ * Use BFS1 with level order.
+ * Adjacencylist build is just an example here, it is not required for this question and does not contribute to anything.
+ */
 public class WordLadder {
 
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
@@ -23,11 +28,12 @@ public class WordLadder {
         }
         Adjacency adjacency = new Adjacency(wordList);
 
-        //Step 2: start from beginWord, run BFS to fill in adjacency list to find the shortest path to endWord
+        //Step 2: start from beginWord, run BFS to fill in adjacency list and at the same time find the shortest path to endWord
         Queue<String> fifo = new LinkedList<>();
         Set<String> visited = new HashSet<>();
         fifo.offer(beginWord);
         visited.add(beginWord);
+        //Doing a level order BFS because we need to get the exact path cost
         int len = 1;
         while (!fifo.isEmpty()){
             int size = fifo.size();
@@ -38,6 +44,8 @@ public class WordLadder {
                 }
                 List<String> adj = adjacency.list.get(map.get(cur));
                 for (String nei : getNeighbor(map, cur)){
+                    //add neighbor words to adjacencyList, even if they are visited
+                    //(adjacency list build should not related to visited or not)
                     adj.add(nei);
                     if (!visited.contains(nei)){
                         visited.add(nei);

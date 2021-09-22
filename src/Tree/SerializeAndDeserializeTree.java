@@ -230,6 +230,10 @@ public class SerializeAndDeserializeTree {
     }
 
     private void serializeHelper(TreeNode root, StringBuilder sb){
+        //Idea: Append the current root with "," to string builder. Do it with preOrder traversal.
+        //Why do preOrder? Because the output string will be easier for us to rebuild the tree if the root level comes first.
+        //(Can use recursion again to build root then build left and right subtree).
+        //Null node needs to be appended as well.
         if (root == null){
             sb.append("null");
             sb.append(','); //separator
@@ -243,6 +247,7 @@ public class SerializeAndDeserializeTree {
 
     // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
+        //Idea: Use
         if (data == null || data.length() == 0){
             return null;
         }
@@ -255,6 +260,7 @@ public class SerializeAndDeserializeTree {
     }
 
     private TreeNode deserializeHelper(List<String> list){
+        //base case: No more node to be built
         if (list.size() == 0 ) {
             return null;
         }

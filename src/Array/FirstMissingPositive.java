@@ -15,7 +15,7 @@ public class FirstMissingPositive {
         }
         //Step 2: for each element, use it as the index key and put onto the input array to record it has been seen
         for (int i=0; i<nums.length; i++){
-            int val = Math.abs(nums[i]);
+            int val = Math.abs(nums[i]); //Get the original abs value because we only care about positive number
             if (val > len){ //the one we just padded
                 continue;
             }
