@@ -85,3 +85,6 @@ public class SingleThreadCPU {
 
 //Seems like we just need a PQ to help us do it, we offer and poll out task
 //At time t, if task a comes, offer it first to PQ then poll out?
+
+//TC:O(nlogn) sort + O(nlogn) PQ push/poll all tasks once = O(nlogn)
+//SC:O(n) new list + O(n) pq = O(n)
