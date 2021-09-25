@@ -1,7 +1,9 @@
 package DemoTaskScheduler;
 
 import java.util.*;
-import java.util.concurrent.Delayed;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * This is using PriorityBlockingQueue with sleeping delay time
@@ -19,7 +21,6 @@ class SomeTask implements Runnable{
 
     @Override
     public void run(){
-        System.out.println("runing a task");
     }
 
     public String toString(){
@@ -39,7 +40,7 @@ public class DelayTaskScheduler {
     public void runTask(long delayTime, Runnable task){
         DelayTask taskA = new DelayTask(delayTime, task);
         q.put(taskA);
-        System.out.println(q.size());
+        System.out.println("Queue size:" + q.size());
     }
 
     public static void main(String[] args){
@@ -119,20 +120,27 @@ class DelayTask implements Comparable{
 class DelayQueue<E>{
     //act as minheap to sort the tasks by executionTime
     private PriorityQueue<DelayTask> q;
+    private Lock lock = new ReentrantLock();
+    private Condition condition = lock.newCondition();
 
     public DelayQueue(){
         q = new PriorityQueue<>();
     }
 
-    public synchronized void put(DelayTask task){
-        if (q.size() == 0){
-            notifyAll();
-        }
-        q.offer(task);
-        if (q.peek() == task && q.size() > 1){
-            System.out.println("Putting a task with higher priority! " + task.getName());
-            //if put in a task that has higher priority
-            notifyAll();
+    public void put(DelayTask task){
+        lock.lock();
+        try{
+            if (q.size() == 0){
+                condition.signal();
+            }
+            q.offer(task);
+            if (q.peek() == task && q.size() > 1){
+                System.out.println("Putting a task with higher priority! " + task.getName());
+                //if put in a task that has higher priority
+                condition.signal();
+            }
+        }finally{
+            lock.unlock();
         }
     }
 
@@ -152,31 +160,34 @@ class DelayQueue<E>{
 //        return null;
 //    }
 
-    public synchronized DelayTask get(){
-        //Polling
-        while (q.size() == 0){
-            try{
-                wait(); //release lock, and need notify() to exit the wait?
-            }catch(InterruptedException e){
-                e.printStackTrace();
+    public DelayTask get() throws InterruptedException{
+        lock.lock();
+        try{
+            //Polling
+            while (q.size() == 0){
+                try{
+                    condition.await();
+//                    wait(); //release lock, and need notify() to exit the wait?
+                }catch(InterruptedException e){
+                    e.printStackTrace();
+                }
             }
-        }
 
-        DelayTask next = q.peek();
-        long executionTime = next.getExecutionTime();
+            DelayTask next = q.peek();
+            long executionTime = next.getExecutionTime();
 
-        //Calculate the time to sleep for
-        long delay = executionTime - System.currentTimeMillis();
-        if (delay <= 0){
-            System.out.println("Consumer: Running task" + next.getName());
-            return q.poll();
-        }else {
-            try{
+            //Calculate the time to sleep for
+            long delay = executionTime - System.currentTimeMillis();
+            if (delay <= 0){
+                System.out.println("Consumer: Running task" + next.getName());
+                return q.poll();
+            }else {
                 System.out.println("Consumer: Going to sleep for task " + next.getName() + ", delay time: " + delay);
-                Thread.sleep(delay); //release lock again
-            }catch (InterruptedException e){
-                e.printStackTrace();
+                condition.awaitNanos(delay);
+//                    Thread.sleep(delay); //release lock again
             }
+        }finally{
+            lock.unlock();
         }
         return null;
     }
