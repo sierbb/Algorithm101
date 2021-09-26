@@ -17,6 +17,9 @@ public class FileSystem {
     }
 
     public List<String> ls(String path) {
+        //start from root directory, iteratively find the entry of current subdirectory
+        //if found the subdirectory, jump to the subdirectory to the next level
+
         List<String> res = new ArrayList<>();
         String[] dirs = path.split("/"); //"/" split into [""]
         File cur = root;
