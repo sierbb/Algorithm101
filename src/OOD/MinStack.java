@@ -19,10 +19,7 @@ public class MinStack {
         if (!minStack.isEmpty() && val == getMin()){
             minStack.peekFirst().freq++;
         }else if (minStack.isEmpty() || val < getMin()){
-            if (!minStack.isEmpty()){
-            }
             minStack.offerFirst(new Pair(val));
-
         }
     }
 
