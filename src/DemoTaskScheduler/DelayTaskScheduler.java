@@ -48,7 +48,17 @@ public class DelayTaskScheduler {
         DelayTaskScheduler obj = new DelayTaskScheduler(new DelayQueue<DelayTask>());
         //current thread act as producer to run task
         //Another process/ thread to do the get task and run them
-        new Thread(new Consumer(obj.q)).start(); //consumer will keep taking and run those task if any
+
+        //Multiple consumers
+        List<Thread> threads = new ArrayList<>();
+        for (int i=0; i<5; i++){
+            threads.add(new Thread(new Consumer(obj.q)));
+        }
+        for (Thread t : threads){
+            t.start();
+        }
+        //Single consumer
+        //new Thread(new Consumer(obj.q)).start(); //consumer will keep taking and run those task if any
 
         int count = 0;
         while (true){
@@ -107,7 +117,11 @@ class DelayTask implements Comparable{
 
     @Override
     public int compareTo(Object other){
-        return (int)(this.executionTime - ((DelayTask)other).executionTime);
+        if ( ((DelayTask)other).executionTime == this.executionTime){
+            return 0;
+        }
+        return ((DelayTask)other).executionTime < this.executionTime ? 1 : -1;
+//        return (int)(this.executionTime - ((DelayTask)other).executionTime);
     }
 
     public void run(){
@@ -134,6 +148,8 @@ class DelayQueue<E>{
                 condition.signal();
             }
             q.offer(task);
+            //This can helper wake up consumer when they are blocked by the last task
+            //to avoid them not able to check on new task that has higher priority
             if (q.peek() == task && q.size() > 1){
                 System.out.println("Putting a task with higher priority! " + task.getName());
                 //if put in a task that has higher priority
