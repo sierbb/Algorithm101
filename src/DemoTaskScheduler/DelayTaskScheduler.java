@@ -1,6 +1,7 @@
 package DemoTaskScheduler;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -88,7 +89,7 @@ class Consumer implements Runnable{
                 if (task != null){
                     task.run();
                 }
-                Thread.sleep(1000);
+//                Thread.sleep(1000);
             }catch (InterruptedException e){
                 e.printStackTrace();
             }
@@ -199,7 +200,7 @@ class DelayQueue<E>{
                 return q.poll();
             }else {
                 System.out.println("Consumer: Going to sleep for task " + next.getName() + ", delay time: " + delay);
-                condition.awaitNanos(delay);
+                condition.await(delay, TimeUnit.MILLISECONDS);
 //                    Thread.sleep(delay); //release lock again
             }
         }finally{
