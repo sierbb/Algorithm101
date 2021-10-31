@@ -63,7 +63,7 @@ public class MaxStack {
         int max = peekMax();
         List<Node> list = map.get(max);
         Node toPop = list.get(list.size()-1);
-        list.remove(list.get(list.size()-1));
+        list.remove(list.size()-1);
         ddl.remove(toPop);
         if (list.size() == 0){
             map.remove(max);
@@ -86,7 +86,7 @@ public class MaxStack {
                 head = n;
                 tail = n;
                 head.next = tail;
-                tail.next = head;
+                tail.prev = head;
             }else {
                 tail.next = n;
                 n.prev = tail;
